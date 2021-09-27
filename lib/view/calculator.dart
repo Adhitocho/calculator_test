@@ -10,9 +10,11 @@ class Calculator extends StatefulWidget {
 class _CalculatorState extends State<Calculator> {
   var expression = "";
   var result = "";
+  List<String> history = [];
 
   _calculate() {
     try {
+      history.add(expression);
       expression = expression.replaceAll('x', '*');
       expression = expression.replaceAll('%', '/100');
 
@@ -57,12 +59,12 @@ class _CalculatorState extends State<Calculator> {
     });
   }
 
-  Widget CalcButton(
-    String btnText,
-    Color color,
-  ) {
+  Widget calcButton({
+    required String btnText,
+    required Color color,
+  }) {
     return Container(
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       width: 65,
       height: 65,
       alignment: Alignment.center,
@@ -74,13 +76,28 @@ class _CalculatorState extends State<Calculator> {
         onPressed: () => _onButtonPressed(btnText),
         child: Text(
           btnText,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 25,
             color: Color(0xff555756),
           ),
         ),
       ),
     );
+  }
+
+  Widget renderHistory() {
+    if(history.isNotEmpty) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 50),
+        height: 50,
+        child: ListView(
+          shrinkWrap: false,
+          children: history.map((e) => Text(e, textAlign: TextAlign.end,)).toList(),
+        ),
+      );
+    }
+
+    return const SizedBox();
   }
 
   @override
@@ -91,17 +108,15 @@ class _CalculatorState extends State<Calculator> {
           child: Column(
             children: [
               const SizedBox(
-                height: 50,
+                height: 10,
               ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: 300,
-                  alignment: Alignment.bottomRight,
-                  child: Text(expression,
-                      style:
-                          TextStyle(fontSize: 50, fontWeight: FontWeight.w500), textAlign: TextAlign.right,),
-                ),
+              renderHistory(),
+              Container(
+                width: 300,
+                alignment: Alignment.bottomRight,
+                child: Text(expression,
+                    style:
+                        TextStyle(fontSize: 50, fontWeight: FontWeight.w500), textAlign: TextAlign.right,),
               ),
               Expanded(
                 flex: 2,
@@ -111,21 +126,21 @@ class _CalculatorState extends State<Calculator> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CalcButton(
-                          'C',
-                          Colors.grey,
+                        calcButton(
+                          btnText: 'C',
+                          color: Colors.grey,
                         ),
-                        CalcButton(
-                          '%',
-                          Colors.grey,
+                        calcButton(
+                          btnText:'%',
+                          color:Colors.grey,
                         ),
-                        CalcButton(
-                          '<',
-                          Colors.grey,
+                        calcButton(
+                          btnText:'<',
+                          color:Colors.grey,
                         ),
-                        CalcButton(
-                          '/',
-                          Colors.grey,
+                        calcButton(
+                          btnText:'/',
+                          color:Colors.grey,
                         ),
                       ],
                     ), // Paling Atas
@@ -133,43 +148,21 @@ class _CalculatorState extends State<Calculator> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CalcButton(
-                          '7',
-                          Colors.amber,
+                        calcButton(
+                          btnText:'7',
+                          color:Colors.amber,
                         ),
-                        CalcButton(
-                          '8',
-                          Colors.amber,
+                        calcButton(
+                          btnText:'8',
+                          color:Colors.amber,
                         ),
-                        CalcButton(
-                          '9',
-                          Colors.amber,
+                        calcButton(
+                          btnText:'9',
+                          color:Colors.amber,
                         ),
-                        CalcButton(
-                          'x',
-                          Colors.grey,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CalcButton(
-                          '4',
-                          Colors.amber,
-                        ),
-                        CalcButton(
-                          '5',
-                          Colors.amber,
-                        ),
-                        CalcButton(
-                          '6',
-                          Colors.amber,
-                        ),
-                        CalcButton(
-                          '-',
-                          Colors.grey,
+                        calcButton(
+                          btnText:'x',
+                          color:Colors.grey,
                         ),
                       ],
                     ),
@@ -177,21 +170,21 @@ class _CalculatorState extends State<Calculator> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CalcButton(
-                          '1',
-                          Colors.amber,
+                        calcButton(
+                          btnText:'4',
+                          color:Colors.amber,
                         ),
-                        CalcButton(
-                          '2',
-                          Colors.amber,
+                        calcButton(
+                          btnText:'5',
+                          color:Colors.amber,
                         ),
-                        CalcButton(
-                          '3',
-                          Colors.amber,
+                        calcButton(
+                          btnText:'6',
+                          color:Colors.amber,
                         ),
-                        CalcButton(
-                          '+',
-                          Colors.grey,
+                        calcButton(
+                          btnText:'-',
+                          color:Colors.grey,
                         ),
                       ],
                     ),
@@ -199,21 +192,43 @@ class _CalculatorState extends State<Calculator> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CalcButton(
-                          '00',
-                          Colors.white,
+                        calcButton(
+                          btnText:'1',
+                          color:Colors.amber,
                         ),
-                        CalcButton(
-                          '0',
-                          Colors.amber,
+                        calcButton(
+                          btnText:'2',
+                          color:Colors.amber,
                         ),
-                        CalcButton(
-                          '.',
-                          Colors.white,
+                        calcButton(
+                          btnText:'3',
+                          color:Colors.amber,
                         ),
-                        CalcButton(
-                          '=',
-                          Colors.grey,
+                        calcButton(
+                          btnText:'+',
+                          color:Colors.grey,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        calcButton(
+                          btnText:'00',
+                          color:Colors.white,
+                        ),
+                        calcButton(
+                          btnText:'0',
+                          color:Colors.amber,
+                        ),
+                        calcButton(
+                          btnText:'.',
+                          color:Colors.white,
+                        ),
+                        calcButton(
+                          btnText:'=',
+                          color:Colors.grey,
                         ),
                       ],
                     ),
